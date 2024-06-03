@@ -70,6 +70,16 @@ class Payment extends PaytrClient
     private $currency = Currency::TRY;
 
     /**
+     * @var int
+     */
+    private $timeoutLimit = 0;
+
+    /**
+     * @var string
+     */
+    private $lang = 'tr';
+
+    /**
      * @return string
      */
     public function getCurrency(): string
@@ -308,6 +318,44 @@ class Payment extends PaytrClient
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getTimeoutLimit(): int
+    {
+        return $this->timeoutLimit;
+    }
+
+    /**
+     * @param int $timeoutLimit
+     * @return self
+     */
+    public function setTimeoutLimit(int $timeoutLimit): self
+    {
+        $this->timeoutLimit = $timeoutLimit;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLang(): string
+    {
+        return $this->lang;
+    }
+
+    /**
+     * @param string $lang
+     * @return self
+     */
+    public function setLang(string $lang): self
+    {
+        $this->lang = $lang;
+
+        return $this;
+    }
+
     private function getHash()
     {
         return '' .
@@ -356,6 +404,8 @@ class Payment extends PaytrClient
             'merchant_fail_url' => $this->options['fail_url'],
             'test_mode' => $this->options['test_mode'],
             'debug_on' => $this->isDebugOn(),
+            'timeout_limit' => $this->getTimeoutLimit(),
+            'lang' => $this->getLang(),
         ];
     }
 
