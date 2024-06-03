@@ -14,46 +14,57 @@ class Payment extends PaytrClient
      * @var string
      */
     private $userIp;
+
     /**
      * @var string
      */
     private $merchantOid;
+
     /**
      * @var string
      */
     private $email;
+
     /**
      * @var float
      */
     private $paymentAmount;
+
     /**
      * @var int
      */
     private $noInstallment;
+
     /**
      * @var int
      */
     private $maxInstallment;
+
     /**
      * @var string
      */
     private $userName;
+
     /**
      * @var string
      */
     private $userAddress;
+
     /**
      * @var string
      */
     private $userPhone;
+
     /**
      * @var string
      */
     private $successUrl;
+
     /**
      * @var string
      */
     private $failUrl;
+
     /**
      * @var bool
      */
@@ -70,6 +81,16 @@ class Payment extends PaytrClient
     private $currency = Currency::TRY;
 
     /**
+     * @var int
+     */
+    private $timeoutLimit = 0;
+
+    /**
+     * @var string
+     */
+    private $lang = 'tr';
+
+    /**
      * @return string
      */
     public function getCurrency(): string
@@ -83,6 +104,7 @@ class Payment extends PaytrClient
     public function setCurrency(string $currency)
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -100,6 +122,7 @@ class Payment extends PaytrClient
     public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
+
         return $this;
     }
 
@@ -117,6 +140,7 @@ class Payment extends PaytrClient
     public function setMerchantOid(string $merchantOid)
     {
         $this->merchantOid = $merchantOid;
+
         return $this;
     }
 
@@ -134,6 +158,7 @@ class Payment extends PaytrClient
     public function setEmail(string $email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -151,6 +176,7 @@ class Payment extends PaytrClient
     public function setPaymentAmount(float $paymentAmount)
     {
         $this->paymentAmount = $paymentAmount;
+
         return $this;
     }
 
@@ -168,6 +194,7 @@ class Payment extends PaytrClient
     public function setNoInstallment(int $noInstallment)
     {
         $this->noInstallment = $noInstallment;
+
         return $this;
     }
 
@@ -185,6 +212,7 @@ class Payment extends PaytrClient
     public function setMaxInstallment(int $maxInstallment)
     {
         $this->maxInstallment = $maxInstallment;
+
         return $this;
     }
 
@@ -202,6 +230,7 @@ class Payment extends PaytrClient
     public function setUserName(string $userName)
     {
         $this->userName = $userName;
+
         return $this;
     }
 
@@ -219,6 +248,7 @@ class Payment extends PaytrClient
     public function setUserAddress(string $userAddress)
     {
         $this->userAddress = $userAddress;
+
         return $this;
     }
 
@@ -236,6 +266,7 @@ class Payment extends PaytrClient
     public function setUserPhone(string $userPhone)
     {
         $this->userPhone = $userPhone;
+
         return $this;
     }
 
@@ -253,6 +284,7 @@ class Payment extends PaytrClient
     public function setSuccessUrl(string $successUrl)
     {
         $this->successUrl = $successUrl;
+
         return $this;
     }
 
@@ -270,6 +302,7 @@ class Payment extends PaytrClient
     public function setFailUrl(string $failUrl)
     {
         $this->failUrl = $failUrl;
+
         return $this;
     }
 
@@ -287,6 +320,7 @@ class Payment extends PaytrClient
     public function setDebugOn(bool $debugOn)
     {
         $this->debugOn = $debugOn;
+
         return $this;
     }
 
@@ -305,6 +339,45 @@ class Payment extends PaytrClient
     public function setBasket(Basket $basket)
     {
         $this->basket = $basket;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeoutLimit(): int
+    {
+        return $this->timeoutLimit;
+    }
+
+    /**
+     * @param int $timeoutLimit
+     * @return self
+     */
+    public function setTimeoutLimit(int $timeoutLimit): self
+    {
+        $this->timeoutLimit = $timeoutLimit;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLang(): string
+    {
+        return $this->lang;
+    }
+
+    /**
+     * @param string $lang
+     * @return self
+     */
+    public function setLang(string $lang): self
+    {
+        $this->lang = $lang;
+
         return $this;
     }
 
@@ -326,6 +399,7 @@ class Payment extends PaytrClient
     private function createPaymentToken()
     {
         $hash = $this->getHash();
+        
         return base64_encode(hash_hmac('sha256', $hash . $this->credentials['merchant_salt'], $this->credentials['merchant_key'], true));
     }
 
@@ -337,24 +411,27 @@ class Payment extends PaytrClient
     private function getBody()
     {
         $paymentToken = $this->createPaymentToken();
+
         return [
             'merchant_id' => $this->credentials['merchant_id'],
             'user_ip' => $this->getUserIp(),
             'merchant_oid' => $this->getMerchantOid(),
             'email' => $this->getEmail(),
             'payment_amount' => $this->formattedPaymentAmount(),
-            'paytr_token' => $paymentToken,
+            'currency' => $this->getCurrency(),
             'user_basket' => $this->basket->formatted(),
-            'debug_on' => $this->isDebugOn(),
             'no_installment' => $this->getNoInstallment(),
             'max_installment' => $this->getMaxInstallment(),
+            'paytr_token' => $paymentToken,
             'user_name' => $this->getUserName(),
             'user_address' => $this->getUserAddress(),
             'user_phone' => $this->getUserPhone(),
             'merchant_ok_url' => $this->options['success_url'],
             'merchant_fail_url' => $this->options['fail_url'],
-            'currency' => $this->getCurrency(),
             'test_mode' => $this->options['test_mode'],
+            'debug_on' => $this->isDebugOn(),
+            'timeout_limit' => $this->getTimeoutLimit(),
+            'lang' => $this->getLang(),
         ];
     }
 
@@ -362,8 +439,7 @@ class Payment extends PaytrClient
     {
         $requestBody = $this->getBody();
         $response = $this->callApi('POST', 'odeme/api/get-token', $requestBody);
-//        return $response->getBody();
-//        return json_decode((string) $response->getBody());
+
         return new PaytrResponse(json_decode((string)$response->getBody(), true));
     }
 }
