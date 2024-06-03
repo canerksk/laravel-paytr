@@ -14,46 +14,57 @@ class Payment extends PaytrClient
      * @var string
      */
     private $userIp;
+
     /**
      * @var string
      */
     private $merchantOid;
+
     /**
      * @var string
      */
     private $email;
+
     /**
      * @var float
      */
     private $paymentAmount;
+
     /**
      * @var int
      */
     private $noInstallment;
+
     /**
      * @var int
      */
     private $maxInstallment;
+
     /**
      * @var string
      */
     private $userName;
+
     /**
      * @var string
      */
     private $userAddress;
+
     /**
      * @var string
      */
     private $userPhone;
+
     /**
      * @var string
      */
     private $successUrl;
+
     /**
      * @var string
      */
     private $failUrl;
+
     /**
      * @var bool
      */
@@ -93,6 +104,7 @@ class Payment extends PaytrClient
     public function setCurrency(string $currency)
     {
         $this->currency = $currency;
+
         return $this;
     }
 
@@ -110,6 +122,7 @@ class Payment extends PaytrClient
     public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
+
         return $this;
     }
 
@@ -127,6 +140,7 @@ class Payment extends PaytrClient
     public function setMerchantOid(string $merchantOid)
     {
         $this->merchantOid = $merchantOid;
+
         return $this;
     }
 
@@ -144,6 +158,7 @@ class Payment extends PaytrClient
     public function setEmail(string $email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -161,6 +176,7 @@ class Payment extends PaytrClient
     public function setPaymentAmount(float $paymentAmount)
     {
         $this->paymentAmount = $paymentAmount;
+
         return $this;
     }
 
@@ -178,6 +194,7 @@ class Payment extends PaytrClient
     public function setNoInstallment(int $noInstallment)
     {
         $this->noInstallment = $noInstallment;
+
         return $this;
     }
 
@@ -195,6 +212,7 @@ class Payment extends PaytrClient
     public function setMaxInstallment(int $maxInstallment)
     {
         $this->maxInstallment = $maxInstallment;
+
         return $this;
     }
 
@@ -212,6 +230,7 @@ class Payment extends PaytrClient
     public function setUserName(string $userName)
     {
         $this->userName = $userName;
+
         return $this;
     }
 
@@ -229,6 +248,7 @@ class Payment extends PaytrClient
     public function setUserAddress(string $userAddress)
     {
         $this->userAddress = $userAddress;
+
         return $this;
     }
 
@@ -246,6 +266,7 @@ class Payment extends PaytrClient
     public function setUserPhone(string $userPhone)
     {
         $this->userPhone = $userPhone;
+
         return $this;
     }
 
@@ -263,6 +284,7 @@ class Payment extends PaytrClient
     public function setSuccessUrl(string $successUrl)
     {
         $this->successUrl = $successUrl;
+
         return $this;
     }
 
@@ -280,6 +302,7 @@ class Payment extends PaytrClient
     public function setFailUrl(string $failUrl)
     {
         $this->failUrl = $failUrl;
+
         return $this;
     }
 
@@ -297,6 +320,7 @@ class Payment extends PaytrClient
     public function setDebugOn(bool $debugOn)
     {
         $this->debugOn = $debugOn;
+
         return $this;
     }
 
@@ -315,6 +339,7 @@ class Payment extends PaytrClient
     public function setBasket(Basket $basket)
     {
         $this->basket = $basket;
+
         return $this;
     }
 
@@ -374,6 +399,7 @@ class Payment extends PaytrClient
     private function createPaymentToken()
     {
         $hash = $this->getHash();
+        
         return base64_encode(hash_hmac('sha256', $hash . $this->credentials['merchant_salt'], $this->credentials['merchant_key'], true));
     }
 
