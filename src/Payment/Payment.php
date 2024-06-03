@@ -337,24 +337,25 @@ class Payment extends PaytrClient
     private function getBody()
     {
         $paymentToken = $this->createPaymentToken();
+
         return [
             'merchant_id' => $this->credentials['merchant_id'],
             'user_ip' => $this->getUserIp(),
             'merchant_oid' => $this->getMerchantOid(),
             'email' => $this->getEmail(),
             'payment_amount' => $this->formattedPaymentAmount(),
-            'paytr_token' => $paymentToken,
+            'currency' => $this->getCurrency(),
             'user_basket' => $this->basket->formatted(),
-            'debug_on' => $this->isDebugOn(),
             'no_installment' => $this->getNoInstallment(),
             'max_installment' => $this->getMaxInstallment(),
+            'paytr_token' => $paymentToken,
             'user_name' => $this->getUserName(),
             'user_address' => $this->getUserAddress(),
             'user_phone' => $this->getUserPhone(),
             'merchant_ok_url' => $this->options['success_url'],
             'merchant_fail_url' => $this->options['fail_url'],
-            'currency' => $this->getCurrency(),
             'test_mode' => $this->options['test_mode'],
+            'debug_on' => $this->isDebugOn(),
         ];
     }
 
