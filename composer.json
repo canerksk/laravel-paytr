@@ -1,5 +1,5 @@
 {
-    "name": "gizemsever/laravel-paytr",
+    "name": "canerksk/laravel-paytr",
     "license": "MIT",
     "type": "library",
     "description": "Laravel Paytr Wrapper",
@@ -13,8 +13,8 @@
     "require": {
         "php": "^8.0|^8.1",
         "guzzlehttp/guzzle": "^7.0.1",
-        "illuminate/collections": "^8|^9|^10",
-        "illuminate/support": "^8.0|^9.0|^10.0"
+        "illuminate/support": "^8|^9|^10|^11",
+        "illuminate/collections": "^8|^9|^10|^11"
     },
     "autoload": {
         "psr-4": {
